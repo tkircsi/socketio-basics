@@ -1,0 +1,32 @@
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+  integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  const socket = io('http://localhost:8000');
+  // let ws = new WebSocket('ws://localhost:8000');
+  // console.log(socket);
+
+  // ws.onopen = (event) => {
+  //   ws.send("I'm connected");
+  // };
+
+  socket.on('connect', (data) => {
+    console.log('Connected');
+    socket.on('welcome', (message) => {
+      console.log(message);
+    });
+
+    setTimeout(() => {
+      socket.emit('some event', {
+        data: " I'm connected",
+      });
+    }, 5000);
+  });
+
+  // ws.onmessage = (event) => {
+  //   console.log(event);
+  // };
+</script>
