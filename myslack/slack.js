@@ -26,7 +26,8 @@ io.on('connection', (socket) => {
 });
 
 namespaces.forEach((ns) => {
-  io.of(ns.endpoint).on('connect', (socket) => {
-    console.log(`${socket.id} has joined ${ns.title}.`);
+  io.of(ns.endpoint).on('connect', (nsSocket) => {
+    console.log(`${nsSocket.id} has joined ${ns.title}.`);
+    nsSocket.emit('nsRooms', ns.rooms);
   });
 });
