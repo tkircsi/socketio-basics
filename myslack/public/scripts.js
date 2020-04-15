@@ -1,24 +1,26 @@
 const socket = io('http://localhost:3000');
-const adminSocket = io('http://localhost:3000/admin');
 
-socket.on('messageFromServer', (dataFromServer) => {
-  console.log(dataFromServer);
-  socket.emit('messageToServer', { data: 'Data from the client.' });
-});
+const eNamespaces = document.querySelector('.namespaces');
 
-adminSocket.on('welcome', (dataFromServer) => {
-  console.log(dataFromServer);
-});
+function createNamespaceItem(image, endpoint) {
+  return `<div class="namespace" ns="${endpoint}">
+  <img
+    src="${image}"
+  />
+</div>`;
+}
 
-socket.on('joined', (msg) => {
-  console.log(msg);
-});
-
-document.querySelector('#message-form').addEventListener('submit', (event) => {
-  event.preventDefault();
-  const msg = document.querySelector('#user-message').value;
-  if (msg !== '') {
-    socket.emit('newMessageToServer', { text: msg });
-    document.querySelector('#user-message').value = '';
-  }
+socket.on('nsList', (data) => {
+  const items = data.map((item) => {
+    return createNamespaceItem(item.image, item.endpoint);
+  });
+  eNamespaces.innerHTML = items.join(' ');
+  Array.from(eNamespaces.getElementsByClassName('namespace')).forEach(
+    (element) => {
+      element.addEventListener('click', (e) => {
+        const nsEndpoint = e.currentTarget.getAttribute('ns');
+        console.log(nsEndpoint);
+      });
+    }
+  );
 });
